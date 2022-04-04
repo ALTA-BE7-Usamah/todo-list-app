@@ -20,6 +20,10 @@ import (
 	_projectRepository "project2/todo-list-app/repository/project"
 	_projectUseCase "project2/todo-list-app/usecase/project"
 
+	_taskHandler "project2/todo-list-app/delivery/handler/task"
+	_taskRepository "project2/todo-list-app/repository/task"
+	_taskUseCase "project2/todo-list-app/usecase/task"
+
 	_middlewares "project2/todo-list-app/delivery/middlewares"
 	_routes "project2/todo-list-app/delivery/routes"
 	_utils "project2/todo-list-app/utils"
@@ -41,6 +45,10 @@ func main() {
 	projectUseCase := _projectUseCase.NewProjectUseCase(projectRepo)
 	projectHandler := _projectHandler.NewProjectHandler(projectUseCase)
 
+	taskRepo := _taskRepository.NewTaskRepository(db)
+	taskUseCase := _taskUseCase.NewTaskUseCase(taskRepo)
+	taskHandler := _taskHandler.NewTaskHandler(taskUseCase)
+
 	e := echo.New()
 	e.Pre(middleware.RemoveTrailingSlash())
 	e.Use(_middlewares.CustomLogger())
@@ -48,6 +56,7 @@ func main() {
 	_routes.RegisterAuthPath(e, authHandler)
 	_routes.RegisterUserPath(e, userHandler)
 	_routes.RegisterProjectPath(e, projectHandler)
+	_routes.RegisterTaskPath(e, taskHandler)
 
 	log.Fatal(e.Start(fmt.Sprintf(":%v", config.Port)))
 }
