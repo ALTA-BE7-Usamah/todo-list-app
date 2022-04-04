@@ -6,6 +6,7 @@ import (
 	_middlewares "project2/todo-list-app/delivery/middlewares"
 	"project2/todo-list-app/entities"
 	_projectUseCase "project2/todo-list-app/usecase/project"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
@@ -67,6 +68,39 @@ func (ph *ProjectHandler) GetAllProjectHandler() echo.HandlerFunc {
 			}
 			responseProject = append(responseProject, response)
 		}
-		return c.JSON(http.StatusOK, helper.ResponseSuccess("success get all rent", responseProject))
+		return c.JSON(http.StatusOK, helper.ResponseSuccess("success get all project", responseProject))
+	}
+}
+
+func (ph *ProjectHandler) GetProjectbyIdHandler() echo.HandlerFunc {
+	return func(c echo.Context) error {
+
+		//mendapatkan id dari token yang dimasukkan
+		idToken, errToken := _middlewares.ExtractToken(c)
+		if errToken != nil {
+			return c.JSON(http.StatusUnauthorized, helper.ResponseFailed("unauthorized"))
+		}
+
+		idStr := c.Param("id")
+		id, err := strconv.Atoi(idStr)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("id not recognise"))
+		}
+
+		project, rows, err := ph.projectUseCase.GetProjectbyId(uint(id), uint(idToken))
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("id not recognise"))
+		}
+		if rows == 0 {
+			return c.JSON(http.StatusBadRequest, helper.ResponseFailed("data not found"))
+		}
+
+		responseProject := map[string]interface{}{
+			"ID":           project.ID,
+			"project_name": project.ProjectName,
+			"task":         project.Task,
+		}
+
+		return c.JSON(http.StatusOK, helper.ResponseSuccess("success get project", responseProject))
 	}
 }

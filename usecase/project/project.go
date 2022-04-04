@@ -24,3 +24,8 @@ func (puc *ProjectUseCase) GetAllProject(userID uint) ([]_entities.Project, erro
 	projects, err := puc.projectRepository.GetAllProject(userID)
 	return projects, err
 }
+
+func (puc *ProjectUseCase) GetProjectbyId(id uint, idToken uint) (_entities.Project, int, error) {
+	project, rows, err := puc.projectRepository.GetProjectbyId(id, idToken)
+	return project, rows, err
+}

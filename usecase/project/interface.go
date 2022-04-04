@@ -7,4 +7,5 @@ import (
 type ProjectUseCaseInterface interface {
 	CreatProject(newproject _entities.Project) (_entities.Project, error)
 	GetAllProject(userID uint) ([]_entities.Project, error)
+	GetProjectbyId(id uint, idToken uint) (_entities.Project, int, error)
 }

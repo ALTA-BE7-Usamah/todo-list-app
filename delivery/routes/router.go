@@ -23,4 +23,5 @@ func RegisterUserPath(e *echo.Echo, uh *_userHandler.UserHandler) {
 func RegisterProjectPath(e *echo.Echo, ph *_projectHandler.ProjectHandler) {
 	e.POST("/projects", ph.CreateProjectHandler(), _middlewares.JWTMiddleware())
 	e.GET("/projects", ph.GetAllProjectHandler(), _middlewares.JWTMiddleware())
+	e.GET("/projects/:id", ph.GetProjectbyIdHandler(), _middlewares.JWTMiddleware())
 }

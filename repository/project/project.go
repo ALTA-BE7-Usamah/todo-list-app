@@ -1,6 +1,7 @@
 package project
 
 import (
+	"errors"
 	_entities "project2/todo-list-app/entities"
 
 	"gorm.io/gorm"
@@ -31,4 +32,27 @@ func (pr *ProjectRepository) GetAllProject(userID uint) ([]_entities.Project, er
 		return nil, tx.Error
 	}
 	return projects, nil
+}
+
+func (pr *ProjectRepository) GetProjectbyId(id uint, idToken uint) (_entities.Project, int, error) {
+	var project _entities.Project
+	tx := pr.database.Preload("Task").Find(&project, id)
+	if tx.Error != nil {
+		return project, 0, tx.Error
+	}
+	if tx.RowsAffected == 0 {
+		return project, 0, nil
+	}
+	if project.UserID != idToken {
+		return project, 0, errors.New("id not recognise")
+	}
+	return project, int(tx.RowsAffected), nil
+}
+
+func (pr *ProjectRepository) AddTaskProject(addTask _entities.Project, id uint, idToken uint) (_entities.Project, int, error) {
+	tx := pr.database.Save(&addTask)
+	if tx.Error != nil {
+		return addTask, 0, tx.Error
+	}
+	return addTask, int(tx.RowsAffected), nil
 }
