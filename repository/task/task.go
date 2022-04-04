@@ -68,3 +68,11 @@ func (tr *TaskRepository) DeleteTask(id uint) (int, error) {
 	}
 	return int(tx.RowsAffected), nil
 }
+
+func (tr *TaskRepository) CompletedTask(task _entities.Task) (_entities.Task, int, error) {
+	tx := tr.database.Save(&task)
+	if tx.Error != nil {
+		return task, 0, tx.Error
+	}
+	return task, int(tx.RowsAffected), nil
+}

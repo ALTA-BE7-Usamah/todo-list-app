@@ -10,4 +10,5 @@ type TaskRepositoryInterface interface {
 	GetTaskById(id uint, idToken uint) (_entities.Task, int, error)
 	UpdateTask(updateTask _entities.Task) (_entities.Task, int, error)
 	DeleteTask(id uint) (int, error)
+	CompletedTask(task _entities.Task) (_entities.Task, int, error)
 }

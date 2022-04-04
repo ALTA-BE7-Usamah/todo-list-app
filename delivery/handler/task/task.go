@@ -159,3 +159,34 @@ func (th *TaskHandler) DeleteTaskHandler() echo.HandlerFunc {
 		return c.JSON(http.StatusOK, helper.ResponseSuccessWithoutData("success deleted task"))
 	}
 }
+
+func (th *TaskHandler) CompletedTaskHandler() echo.HandlerFunc {
+	return func(c echo.Context) error {
+
+		//mendapatkan id dari token yang dimasukkan
+		idToken, errToken := _middlewares.ExtractToken(c)
+		if errToken != nil {
+			return c.JSON(http.StatusUnauthorized, helper.ResponseFailed("unauthorized"))
+		}
+
+		idStr := c.Param("id")
+		id, err := strconv.Atoi(idStr)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("id not recognise"))
+		}
+
+		task, rows, err := th.taskUseCase.CompletedTask(uint(id), uint(idToken))
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("id not recognise"))
+		}
+		if rows == 0 {
+			return c.JSON(http.StatusBadRequest, helper.ResponseFailed("data not found"))
+		}
+		responseTask := map[string]interface{}{
+			"ID":          task.ID,
+			"task_name":   task.TaskName,
+			"task_status": task.TaskStatus,
+		}
+		return c.JSON(http.StatusOK, helper.ResponseSuccess("success get rent", responseTask))
+	}
+}
