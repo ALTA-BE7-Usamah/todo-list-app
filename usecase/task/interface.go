@@ -11,4 +11,5 @@ type TaskUseCaseInterface interface {
 	UpdateTask(updateTask _entities.Task, id uint, idToken uint) (_entities.Task, int, error)
 	DeleteTask(id uint, idToken uint) (int, error)
 	CompletedTask(id uint, idToken uint) (_entities.Task, int, error)
+	ReopenTask(id uint, idToken uint) (_entities.Task, int, error)
 }

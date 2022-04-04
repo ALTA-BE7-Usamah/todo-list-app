@@ -34,4 +34,5 @@ func RegisterTaskPath(e *echo.Echo, th *_taskHandler.TaskHandler) {
 	e.PUT("/todo/tasks/:id", th.UpdateTaskHandler(), _middlewares.JWTMiddleware())
 	e.DELETE("/todo/tasks/:id", th.DeleteTaskHandler(), _middlewares.JWTMiddleware())
 	e.PUT("todo/tasks/:id/completed", th.CompletedTaskHandler(), _middlewares.JWTMiddleware())
+	e.PUT("todo/tasks/:id/reopen", th.ReopenTaskHandler(), _middlewares.JWTMiddleware())
 }

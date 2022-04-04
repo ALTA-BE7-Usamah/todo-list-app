@@ -11,4 +11,5 @@ type TaskRepositoryInterface interface {
 	UpdateTask(updateTask _entities.Task) (_entities.Task, int, error)
 	DeleteTask(id uint) (int, error)
 	CompletedTask(task _entities.Task) (_entities.Task, int, error)
+	ReopenTask(task _entities.Task) (_entities.Task, int, error)
 }

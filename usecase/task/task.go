@@ -75,8 +75,23 @@ func (tuc *TaskUseCase) CompletedTask(id uint, idToken uint) (_entities.Task, in
 		return taskFind, 0, nil
 	}
 	// mengubah TaskStatus menjadi completed
-	taskFind.TaskStatus = "Completed"
+	taskFind.TaskStatus = "completed"
 
 	task, rowsCompleted, errCompleted := tuc.taskRepository.CompletedTask(taskFind)
+	return task, rowsCompleted, errCompleted
+}
+
+func (tuc *TaskUseCase) ReopenTask(id uint, idToken uint) (_entities.Task, int, error) {
+	taskFind, rows, err := tuc.taskRepository.GetTaskById(id, idToken)
+	if err != nil {
+		return taskFind, 0, err
+	}
+	if rows == 0 {
+		return taskFind, 0, nil
+	}
+	// mengubah TaskStatus menjadi not completed
+	taskFind.TaskStatus = "not completed"
+
+	task, rowsCompleted, errCompleted := tuc.taskRepository.ReopenTask(taskFind)
 	return task, rowsCompleted, errCompleted
 }
