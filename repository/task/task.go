@@ -56,3 +56,15 @@ func (tr *TaskRepository) UpdateTask(updateTask _entities.Task) (_entities.Task,
 	}
 	return updateTask, int(tx.RowsAffected), nil
 }
+
+func (tr *TaskRepository) DeleteTask(id uint) (int, error) {
+	var task _entities.Task
+	tx := tr.database.Delete(&task, id)
+	if tx.Error != nil {
+		return 0, tx.Error
+	}
+	if tx.RowsAffected == 0 {
+		return 0, tx.Error
+	}
+	return int(tx.RowsAffected), nil
+}

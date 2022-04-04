@@ -1,6 +1,7 @@
 package task
 
 import (
+	"errors"
 	_entities "project2/todo-list-app/entities"
 	_taskRepository "project2/todo-list-app/repository/task"
 )
@@ -46,4 +47,21 @@ func (tuc *TaskUseCase) UpdateTask(updateTask _entities.Task, id uint, idToken u
 	}
 	task, rows, err := tuc.taskRepository.UpdateTask(taskFind)
 	return task, rows, err
+}
+
+func (tuc *TaskUseCase) DeleteTask(id uint, idToken uint) (int, error) {
+	taskFind, rows, err := tuc.taskRepository.GetTaskById(id, idToken)
+	if err != nil {
+		return 0, err
+	}
+	if rows == 0 {
+		return 0, nil
+	}
+	if taskFind.UserID != idToken {
+		return 1, errors.New("unauthorized")
+	}
+
+	rowsDelete, errDelete := tuc.taskRepository.DeleteTask(id)
+	return rowsDelete, errDelete
+
 }
