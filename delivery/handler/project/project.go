@@ -45,3 +45,28 @@ func (ph *ProjectHandler) CreateProjectHandler() echo.HandlerFunc {
 		return c.JSON(http.StatusOK, helper.ResponseSuccessWithoutData("success create project"))
 	}
 }
+
+func (ph *ProjectHandler) GetAllProjectHandler() echo.HandlerFunc {
+	return func(c echo.Context) error {
+
+		idToken, errToken := _middlewares.ExtractToken(c)
+		if errToken != nil {
+			return c.JSON(http.StatusUnauthorized, helper.ResponseFailed("unauthorized"))
+		}
+
+		projects, err := ph.projectUseCase.GetAllProject(uint(idToken))
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("failed to fetch data"))
+		}
+
+		responseProject := []map[string]interface{}{}
+		for i := 0; i < len(projects); i++ {
+			response := map[string]interface{}{
+				"ID":           projects[i].ID,
+				"project_name": projects[i].ProjectName,
+			}
+			responseProject = append(responseProject, response)
+		}
+		return c.JSON(http.StatusOK, helper.ResponseSuccess("success get all rent", responseProject))
+	}
+}

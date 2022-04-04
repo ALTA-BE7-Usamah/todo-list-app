@@ -23,3 +23,12 @@ func (pr *ProjectRepository) CreatProject(newproject _entities.Project) (_entiti
 	}
 	return newproject, nil
 }
+
+func (pr *ProjectRepository) GetAllProject(userID uint) ([]_entities.Project, error) {
+	var projects []_entities.Project
+	tx := pr.database.Where("user_id = ?", userID).Find(&projects)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+	return projects, nil
+}

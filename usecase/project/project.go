@@ -19,3 +19,8 @@ func (puc *ProjectUseCase) CreatProject(newproject _entities.Project) (_entities
 	newproject, err := puc.projectRepository.CreatProject(newproject)
 	return newproject, err
 }
+
+func (puc *ProjectUseCase) GetAllProject(userID uint) ([]_entities.Project, error) {
+	projects, err := puc.projectRepository.GetAllProject(userID)
+	return projects, err
+}
