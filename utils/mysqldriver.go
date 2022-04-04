@@ -5,18 +5,12 @@ import (
 	"project2/todo-list-app/configs"
 	"project2/todo-list-app/entities"
 
-	"github.com/joho/godotenv"
 	"github.com/labstack/gommon/log"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
 func InitDB(config *configs.AppConfig) *gorm.DB {
-
-	err := godotenv.Load()
-	if err != nil {
-		panic("Tidak ada file konfigurasi dotenv tersedia")
-	}
 
 	connectionString := fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?charset=utf8&parseTime=True&loc=Local",
 		config.Database.Username,
