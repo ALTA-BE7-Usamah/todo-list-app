@@ -9,4 +9,5 @@ type ProjectUseCaseInterface interface {
 	GetAllProject(userID uint) ([]_entities.Project, error)
 	GetProjectbyId(id uint, idToken uint) (_entities.Project, int, error)
 	AddTaskProject(addTask _entities.Task, id uint, idToken uint) (_entities.Project, int, error)
+	DeleteProject(id uint, idToken uint) (int, error)
 }

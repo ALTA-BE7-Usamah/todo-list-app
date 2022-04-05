@@ -1,6 +1,7 @@
 package project
 
 import (
+	"errors"
 	_entities "project2/todo-list-app/entities"
 	_projectRepository "project2/todo-list-app/repository/project"
 )
@@ -44,4 +45,21 @@ func (puc *ProjectUseCase) AddTaskProject(addTask _entities.Task, id uint, idTok
 
 	project, rowsAdd, errAdd := puc.projectRepository.AddTaskProject(addTask, projectFind)
 	return project, rowsAdd, errAdd
+}
+
+func (puc *ProjectUseCase) DeleteProject(id uint, idToken uint) (int, error) {
+	projectFind, rows, err := puc.projectRepository.GetProjectbyId(id, idToken)
+	if err != nil {
+		return 0, err
+	}
+	if rows == 0 {
+		return 0, nil
+	}
+	if projectFind.UserID != idToken {
+		return 1, errors.New("unauthorized")
+	}
+
+	rowsDelete, errDelete := puc.projectRepository.DeleteProject(id)
+	return rowsDelete, errDelete
+
 }
