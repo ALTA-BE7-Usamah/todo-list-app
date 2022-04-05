@@ -29,3 +29,19 @@ func (puc *ProjectUseCase) GetProjectbyId(id uint, idToken uint) (_entities.Proj
 	project, rows, err := puc.projectRepository.GetProjectbyId(id, idToken)
 	return project, rows, err
 }
+
+func (puc *ProjectUseCase) AddTaskProject(addTask _entities.Task, id uint, idToken uint) (_entities.Project, int, error) {
+	projectFind, rows, err := puc.projectRepository.GetProjectbyId(id, idToken)
+	if err != nil {
+		return projectFind, 0, err
+	}
+	if rows == 0 {
+		return projectFind, 0, nil
+	}
+
+	addTask.ProjectID = &projectFind.ID
+	addTask.UserID = projectFind.UserID
+
+	project, rowsAdd, errAdd := puc.projectRepository.AddTaskProject(addTask, projectFind)
+	return project, rowsAdd, errAdd
+}

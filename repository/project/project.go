@@ -49,10 +49,10 @@ func (pr *ProjectRepository) GetProjectbyId(id uint, idToken uint) (_entities.Pr
 	return project, int(tx.RowsAffected), nil
 }
 
-func (pr *ProjectRepository) AddTaskProject(addTask _entities.Project, id uint, idToken uint) (_entities.Project, int, error) {
+func (pr *ProjectRepository) AddTaskProject(addTask _entities.Task, project _entities.Project) (_entities.Project, int, error) {
 	tx := pr.database.Save(&addTask)
 	if tx.Error != nil {
-		return addTask, 0, tx.Error
+		return project, 0, tx.Error
 	}
-	return addTask, int(tx.RowsAffected), nil
+	return project, int(tx.RowsAffected), nil
 }
