@@ -25,6 +25,7 @@ func RegisterProjectPath(e *echo.Echo, ph *_projectHandler.ProjectHandler) {
 	e.POST("/projects", ph.CreateProjectHandler(), _middlewares.JWTMiddleware())
 	e.GET("/projects", ph.GetAllProjectHandler(), _middlewares.JWTMiddleware())
 	e.GET("/projects/:id", ph.GetProjectbyIdHandler(), _middlewares.JWTMiddleware())
+	e.PUT("/projects/:id", ph.AddTaskProjectHandler(), _middlewares.JWTMiddleware())
 }
 
 func RegisterTaskPath(e *echo.Echo, th *_taskHandler.TaskHandler) {
