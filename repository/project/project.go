@@ -56,3 +56,15 @@ func (pr *ProjectRepository) AddTaskProject(addTask _entities.Task, project _ent
 	}
 	return project, int(tx.RowsAffected), nil
 }
+
+func (tr *ProjectRepository) DeleteProject(id uint) (int, error) {
+	var project _entities.Project
+	tx := tr.database.Delete(&project, id)
+	if tx.Error != nil {
+		return 0, tx.Error
+	}
+	if tx.RowsAffected == 0 {
+		return 0, tx.Error
+	}
+	return int(tx.RowsAffected), nil
+}
